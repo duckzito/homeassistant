@@ -1,0 +1,30 @@
+esphome:
+  name: kitchen
+  platform: ESP32
+  board: esp-wrover-kit
+
+wifi:
+  networks:
+  - ssid: "My Wifi"
+    password: "1234"
+
+# Enable logging
+logger: 
+
+api:
+  password: "1234"
+
+ota:
+  password: "1234"
+
+
+sensor:
+  - platform: dht
+    pin: 04
+    model: DHT11
+    temperature:
+      name: "Kitchen Temperature"
+    humidity:
+      name: "Kitchen Humidity"
+    update_interval: 30s
+

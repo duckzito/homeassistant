@@ -1,0 +1,57 @@
+esphome:
+  name: camisnode
+  platform: ESP32
+  board: esp-wrover-kit
+
+wifi:
+  ssid: "My Wifi"
+  password: "1234"
+  power_save_mode: none
+
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "1234"
+
+ota:
+  password: "1234"
+
+light:
+  - platform: monochromatic
+    output: pwm_output
+    name: "Camis LED light"
+
+output:
+  - platform: ledc
+    pin: 23
+    frequency: 1000 Hz
+    id: pwm_output
+
+sensor:
+  - platform: dht
+    pin: 22
+    model: DHT11
+    temperature:
+      name: "Camis Room Temperature"
+    humidity:
+      name: "Camis Room Humidity"
+    update_interval: 30s
+
+remote_transmitter:
+  pin: 33
+  carrier_duty_percent: 40%
+
+switch:
+  - platform: template
+    name: "Camis Main light"
+    turn_on_action:
+      - remote_transmitter.transmit_nec:
+          address: 0x08F7
+          command: 0xF807
+    turn_off_action:
+      - remote_transmitter.transmit_nec:
+          address: 0x08F7
+          command: 0xF807

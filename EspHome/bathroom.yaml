@@ -1,0 +1,36 @@
+esphome:
+  name: bathroom
+  platform: ESP32
+  board: esp-wrover-kit
+
+wifi:
+  networks:
+  - ssid: "My Wifi"
+    password: "12345"
+
+# Enable logging
+logger: 
+
+#mqtt:
+ # broker: 181.164.48.122
+ # port: 18838
+ # username: duckzito
+ # password: Wh3r3N0M4nH4sG0n3B3f0r3
+
+api:
+  password: "1234"
+
+ota:
+  password: "1234"
+
+
+sensor:
+  - platform: dht
+    pin: 04
+    model: DHT11
+    temperature:
+      name: "BathRoom Temperature"
+    humidity:
+      name: "BathRoom Humidity"
+    update_interval: 30s
+

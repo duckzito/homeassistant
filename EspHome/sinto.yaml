@@ -1,0 +1,42 @@
+esphome:
+  name: fancontrol
+  platform: ESP32
+  board: esp-wrover-kit
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "1234"
+
+ota:
+  password: "1234"
+
+wifi:
+  ssid: "My Wifi"
+  password: "1234"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sinto Fallback Hotspot"
+    password: "1234"
+
+captive_portal:
+
+
+sensor:
+  - platform: dht
+    pin: 04
+    model: DHT11
+    temperature:
+      name: "LivinRoom Temperature"
+    humidity:
+      name: "LivingRoom Humidity"
+    update_interval: 30s
+
+switch:
+  - platform: gpio
+    name: "Relay"
+    pin: 
+      number: 12
