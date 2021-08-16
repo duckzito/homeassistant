@@ -1,0 +1,205 @@
+- id: '1572648396989'
+  alias: Encender Luces Cami
+  description: ''
+  trigger:
+  - event: sunset
+    offset: -01:00:00
+    platform: sun
+  condition: []
+  action:
+  - data:
+      brightness: 150
+    entity_id: light.camis_led_ligth
+    service: light.turn_on
+- id: '1572648428695'
+  alias: Apagar Luces Cami
+  description: ''
+  trigger:
+  - at: 08:00
+    platform: time
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.camis_led_switch
+    service: switch.turn_off
+- id: '1572660208571'
+  alias: Lampara Living - Sunset
+  description: ''
+  trigger:
+  - event: sunset
+    offset: -01:00:00
+    platform: sun
+  condition: []
+  action:
+  - device_id: 04a4af0fef9b4a959b0768bb99c5159c
+    domain: switch
+    entity_id: switch.living_room_lamp
+    type: turn_on
+- id: '1575750537462'
+  alias: Purge Database
+  description: ''
+  trigger:
+  - at: 02:30
+    platform: time
+  condition: []
+  action:
+  - alias: ''
+    data:
+      keep_days: '5'
+    service: recorder.purge
+- id: '1578619888140'
+  alias: Turn On The Light when is raining
+  description: ''
+  trigger:
+  - entity_id: sensor.dark_sky_precip_intensity
+    platform: state
+    to: rain
+  condition:
+  - condition: state
+    entity_id: group.all_devices
+    state: home
+  - after: '10:00'
+    condition: time
+  action:
+  - device_id: 8830be884e7b46ac8d4d55afdb4d3ba5
+    domain: switch
+    entity_id: switch.living_room_lamp
+    type: turn_on
+- id: lalalala
+  alias: Dim Camis Light 15% at 22hs
+  trigger:
+  - at: '22:00'
+    platform: time
+  action:
+  - data:
+      brightness: 50
+    entity_id: light.camis_led_ligth
+    service: light.turn_on
+- id: '1582936814184'
+  alias: Dim Camis Light 35% at 21hs
+  description: ''
+  trigger:
+  - at: '21:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      brightness: 100
+    entity_id: light.camis_led_ligth
+    service: light.turn_on
+- id: '1589855710057'
+  alias: Turn off Living lamp when playing on living tv after 22:30 hs
+  description: ''
+  trigger:
+  - entity_id: media_player.living_tv
+    from: idle
+    platform: state
+    to: playing
+  condition:
+  - after: '22:30'
+    condition: time
+  action:
+  - device_id: 8830be884e7b46ac8d4d55afdb4d3ba5
+    domain: switch
+    entity_id: switch.living_room_lamp
+    type: turn_off
+- id: '1611408943809'
+  alias: Lampara Living - Apagar
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:56'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8830be884e7b46ac8d4d55afdb4d3ba5
+    entity_id: switch.living_room_lamp
+    domain: switch
+  mode: single
+- id: '1628936052097'
+  alias: Turn on the fan
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.livinroom_temperature_2
+    above: '29'
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 7f4db1e7c2d74bc3b5f416a9a9e0b55e
+    entity_id: switch.relay
+    domain: switch
+  action:
+  - type: turn_on
+    device_id: 7f4db1e7c2d74bc3b5f416a9a9e0b55e
+    entity_id: switch.relay
+    domain: switch
+  mode: single
+- id: '1628942405905'
+  alias: Turn Off The Fan
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.livinroom_temperature_2
+    above: '0'
+    below: '28'
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 7f4db1e7c2d74bc3b5f416a9a9e0b55e
+    entity_id: switch.relay
+    domain: switch
+  action:
+  - type: turn_off
+    device_id: 7f4db1e7c2d74bc3b5f416a9a9e0b55e
+    entity_id: switch.relay
+    domain: switch
+  mode: single
+- id: '1629050304943'
+  alias: Move daily tariff to llano
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00
+    id: toLlano08
+  - platform: time
+    at: '14:00'
+    id: toLlano14
+  - platform: time
+    at: '22:00'
+    id: toLlano22
+  condition: []
+  action:
+  - service: utility_meter.next_tariff
+    target:
+      entity_id: utility_meter.daily_energy
+  mode: single
+- id: '1629050304944'
+  alias: Move daily tariff to valle
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00
+    id: toValle00
+  condition: []
+  action:
+  - service: utility_meter.next_tariff
+    target:
+      entity_id: utility_meter.daily_energy
+  mode: single
+- id: '1629050874500'
+  alias: Move daily tariff to punta
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00'
+    id: toPunta10
+  - platform: time
+    id: toPunta18
+    at: '18:00'
+  condition: []
+  action:
+  - service: utility_meter.next_tariff
+    target:
+      entity_id: utility_meter.daily_energy
+  mode: single

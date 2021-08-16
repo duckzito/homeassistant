@@ -1,0 +1,110 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+
+http:
+  ip_ban_enabled: false     
+  #base_url: plex-duckzito.pitunnel.com
+  #duckzito.duckdns.org
+  #ssl_certificate: /ssl/fullchain.pem
+  #ssl_key: /ssl/privkey.pem
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+sensor: !include sensors.yaml
+device_tracker: !include device_trackers.yaml
+
+light:
+  - platform: mqtt
+    schema: json
+    name: "Camis Led Ligth"
+    command_topic: "camisnode/light/camis_led_light/command"
+    state_topic: "camisnode/light/camis_led_light/state"
+    brightness: true
+    retain: true
+
+switch:
+  - platform: mqtt
+    json_attributes_template: "{{ value_json.state }}"
+    name: "Camis Led Switch"
+    command_topic: "camisnode/light/camis_led_light/command"
+    state_topic: "camisnode/light/camis_led_light/state"
+    payload_off: "{'state':'OFF','brightness':0}"
+    payload_on: "{'state':'ON','brightness':45}"
+    optimistic: true
+    retain: true
+
+#duckdns:
+  #domain: duckzito
+  #access_token: !secret duckdns_token
+
+tuya:
+  username: duckzito@gmail.com
+  password: !secret tuya_password
+  country_code: 54
+  platform: jinvoo_smart 
+
+frontend:
+  themes: !include_dir_merge_named themes/      
+  # themes: !include themes.yaml
+  
+mqtt:
+  broker: !secret mqtt_url
+  port: !secret mqtt_port
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  discovery: true
+  discovery_prefix: home
+
+
+pi_hole:
+  host: '192.168.1.33'
+  ssl: false
+  verify_ssl: false
+  
+
+speedtestdotnet:
+  server_id: 18732
+  scan_interval:
+    minutes: 30
+  monitored_conditions:
+    - ping
+    - download
+    - upload 
+
+
+
+recorder:
+  purge_keep_days: 5
+  db_url: !secret db_url
+  exclude:
+    domains:
+      - automation
+      - updater
+    entities:
+      - sun.sun # Don't record sun data
+      - sensor.last_boot # Comes from 'systemmonitor' sensor platform
+      - sensor.date
+    event_types:
+      - call_service # Don't record service calls
+
+utility_meter:
+  daily_energy:
+    source: sensor.energy_spent
+    name: Daily Energy
+    cycle: daily
+    tariffs:
+      - punta
+      - llano  
+      - valle
+  monthly_energy:
+    source: sensor.enery_spent
+    name: Monthly Energy
+    cycle: monthly
+    tariffs:
+      - punta
+      - llano
+      - valle  

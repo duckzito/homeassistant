@@ -1,0 +1,78 @@
+- platform: mqtt
+  value_template: "{{ value_json.power }}"
+  state_topic: "home/power"
+  unit_of_measurement: "W"
+  name: "power consumption"
+
+- platform: mqtt
+  value_template: "{{ value_json.voltage }}"
+  state_topic: "home/power"
+  unit_of_measurement: "V"
+  name: "Voltage Meter"
+  unique_id: voltage_1
+
+- platform: mqtt
+  value_template: "{{ value_json.current }}"
+  state_topic: "home/power"
+  unit_of_measurement: "A"
+  name: "Current Meter"
+
+- platform: mqtt
+  value_template: "{{ value_json.temperature }}"
+  state_topic: "home/power"
+  unit_of_measurement: "ºC"
+  name: "Outside Temperature"
+
+- platform: mqtt
+  value_template: "{{ value_json.humidity }}"
+  state_topic: "home/power"
+  unit_of_measurement: "%"
+  name: "Outside Humidity"  
+
+- platform: mqtt
+  value_template: "{{ value_json.daily }}"
+  state_topic: "home/power"
+  unit_of_measurement: "kWh"
+  name: "Daily power" 
+
+
+- platform: bitcoin
+  display_options:
+    - exchangerate
+
+- platform: darksky
+  api_key: ee0ce54a05a791428c94a32d7da7c984
+  scan_interval:
+    minutes: 3
+    seconds: 30
+  forecast:
+    - 0
+  hourly_forecast:
+    - 0
+    - 1
+  monitored_conditions:
+    - cloud_cover
+    - summary
+    - temperature
+    - apparent_temperature
+    - wind_speed
+    - humidity
+    - temperature_high
+    - temperature_low 
+    - alerts 
+    - precip_type
+    - precip_intensity
+    - precip_probability
+
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /mnt
+    - type: memory_free
+    - type: load_5m
+
+- platform: integration
+  source: sensor.power_consumption
+  name: energy_spent
+  unit_prefix: k
+  round: 2 
