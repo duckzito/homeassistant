@@ -41,7 +41,7 @@
     - exchangerate
 
 - platform: darksky
-  api_key: ee0ce54a05a791428c94a32d7da7c984
+  api_key: !secret darksky_key
   scan_interval:
     minutes: 3
     seconds: 30
