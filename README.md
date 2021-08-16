@@ -1,1 +1,2 @@
-# homeassistant
+# Home Assistant & Power Configuration
+
